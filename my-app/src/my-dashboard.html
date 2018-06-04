@@ -54,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div main-title>Dashboard</div>
         </app-toolbar>
         <div style="padding: 16px">
-          <canvas id="signature-pad"></canvas>
+          <canvas id="signature-pad" width="300" height="300"></canvas>
           <br>
           <paper-button raised on-tap="_clear">Clear</paper-button>
           <paper-button raised class="submit" on-tap="_save">Save</paper-button>
@@ -115,7 +115,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       dataURLToBlob(dataURL) {
-        // Code taken from https://github.com/ebidel/filer.js
         var parts = dataURL.split(';base64,');
         var contentType = parts[0].split(":")[1];
         var raw = window.atob(parts[1]);

@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="my-accountlist-new.html">
+<link rel="import" href="short-unique-id.html">
 
 <dom-module id="my-accountlist-new">
     <template>
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     @apply --layout-horizontal;
                 }
                 .info paper-input {
-                    width: 50%;
+                    width: 33%;
                 }
             }
 
@@ -69,12 +69,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div main-title>New Account</div>
                 </app-toolbar>
                 <div class="card">
-                    <div class="info">
-                        <paper-input label="Firstname" style="margin-right: 10px;"></paper-input>
-                        <paper-input label="Lastname"></paper-input>
-                    </div>
-                    <paper-input label="Email"></paper-input>
-                    <paper-button raised class="submit">Save</paper-button>
+                    <form action="/accountlist" method="POST">
+                        <paper-input label="Account key" value="{{accountkey}}"></paper-input>
+                        <div class="info">
+                            <paper-input label="Firstname" style="margin-right: 10px;" value="{{firstname}}"></paper-input>
+                            <paper-input label="Middlename" style="margin-right: 10px;" value="{{middlename}}"></paper-input>
+                            <paper-input label="Lastname" value="{{lastname}}"></paper-input>
+                        </div>
+                        <paper-input label="Email"></paper-input>
+                        <paper-button raised class="submit" type="submit">Save</paper-button>
+                    </form>
                 </div>
             </app-header>
         </app-header-layout>
@@ -82,14 +86,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
 
     <script>
-        class MyAccountlistNew extends Polymer.Element {
-            static get is() { return 'my-accountlist-new'; }
+        Polymer({
+            is: 'my-accountlist-new',
+            properties: {
 
-            static get properties() {
-                return {
-                    // route: Object,
-                }
-            }
+            },
+
+            ready() {
+                this.accountkey = this.guid();
+            },
+
+            guid() {
+                var uid = new ShortUniqueId();
+                return uid.randomUUID(6);
+            },
 
             toggleDrawer() {
                 this.dispatchEvent(new CustomEvent('toggleDrawer', {
@@ -99,8 +109,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }));
                 this.$.narrow = !this.$.narrow;
             }
-        }
-
-        window.customElements.define(MyAccountlistNew.is, MyAccountlistNew);
+        })
     </script>
 </dom-module>

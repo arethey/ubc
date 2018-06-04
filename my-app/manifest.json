@@ -1,7 +1,7 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App description",
+  "name": "UBC",
+  "short_name": "Ultra Bio Corporation",
+  "description": "Ultra Bio Corporation",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
