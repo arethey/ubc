@@ -1,0 +1,77 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-about-us">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+      app-toolbar {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+    </style>
+    <app-header-layout has-scrolling-region>
+      <app-header fixed slot="header" condenses reveals effects="waterfall">
+        <app-toolbar class="maintitle">
+          <paper-icon-button icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+          <div main-title>Ultra Bio Corporation</div>
+        </app-toolbar>
+        <div class="card">
+          <h1>About Us</h1>
+          <h3>Our History</h3>
+          <p>For more than a decade, Ultra Bio Corporation has been producing and distributing highly advanced and superior-quality
+            animal health and nutritional products unrivaled in the Philippines. First established as a sole proprietorship
+            in November 1997 under the name Ultra Biologics Supply, the company started in the sub-distribution of animal
+            health and nutritional products, specifically: livestock vaccines, feed additives, antibiotics, and vitamin-mineral
+            pre-mixes. Finally incorporated in September 2002 as Ultra Bio Corporation, the company decided to refocus, thereby
+            increasing its product base and providing more for its clientele by concentrating on direct importation and exclusive
+            distribution. Working under the slogan, “Maximum Performance”, Ultra Bio Corporation continues to provide a superb
+            line of products and to explore new technologies and approaches that enrich and uplift its clientele and the
+            industry.
+          </p>
+          <h3>Vision</h3>
+          <p>TO SUCCESSFULLY CATER TO THE GLOBAL MARKET IN THE PROVISION OF SUPERIOR SERVICES AND PRODUCTS IN THE PURSUIT OF
+            THEIR GOALS, UNDER THE EXEMPLARY IDEAL OF MAXIMUM PERFORMANCE.</p>
+          <h3>Mission</h3>
+          <p><ul>To deliver only high-quality products and superior services to our clientele.</ul>
+            <ul>To constantly search for sources of good quality products.</ul>
+            <ul>To be a factor in the enrichment and growth of the country and of the industry by
+            being a morally, socially, and environmentally responsible company.</ul></p>
+        </div>
+      </app-header>
+    </app-header-layout>
+  </template>
+
+  <script>
+    class MyAboutUs extends Polymer.Element {
+      static get is() { return 'my-about-us'; }
+
+      toggleDrawer() {
+        this.dispatchEvent(new CustomEvent('toggleDrawer', {
+          bubbles: true, composed: true, detail: {
+            narrow: this.$.narrow
+          }
+        }));
+        this.$.narrow = !this.$.narrow;
+      }
+    }
+
+    window.customElements.define(MyAboutUs.is, MyAboutUs);
+  </script>
+</dom-module>

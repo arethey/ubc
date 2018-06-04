@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
@@ -39,6 +41,68 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 16px 0;
         color: #212121;
         font-size: 22px;
+      }
+
+      paper-button {
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 80px;
+      }
+
+      @media (min-width: 767px) {
+        .card-signin {
+          width: 50%;
+          margin: auto;
+        }
+      }
+
+      iron-list {
+        /* padding-top: 16px; */
+        /* margin-top: 64px; */
+        padding-bottom: 16px;
+      }
+
+      .item {
+        @apply --layout-horizontal;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: white;
+        border: 1px solid #ddd;
+        max-width: 800px;
+        margin: 16px auto 0 auto;
+      }
+
+      .item:focus {
+        outline: 0;
+        border-color: #333;
+      }
+
+      .avatar {
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background-color: #DDD;
+      }
+
+      .pad {
+        padding: 0 16px;
+        @apply --layout-flex;
+        @apply --layout-vertical;
+      }
+
+      .primary {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .secondary {
+        font-size: 14px;
+      }
+
+      .dim {
+        color: gray;
       }
     </style>
   </template>

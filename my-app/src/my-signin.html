@@ -1,0 +1,80 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-signin">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+
+            .footer {
+                height: 68px;
+            }
+
+            .action-btn {
+                background-color: #4285f4;
+                color: white;
+                float: right;
+            }
+        </style>
+        <div class="card-signin">
+            <div class="card">
+                <center>
+                    <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
+                </center>
+                <h1>Sign in</h1>
+                <span>to continue to Ultra Bio Corporation</span>
+                <paper-input label="Email">
+                    <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
+                </paper-input>
+                <paper-input label="Password" type="password">
+                    <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
+                </paper-input>
+                <div class="footer">
+                    <br>
+                    <paper-button raised class="action-btn">sign in</paper-button>
+                    <paper-menu-button>
+                        <div slot="dropdown-trigger" style="color: royalblue;">More options</div>
+                        <paper-listbox slot="dropdown-content">
+                            <paper-item>
+                                <a style="text-decoration:none;" href="/signup">Create Account?</a>
+                            </paper-item>
+                            <paper-item>
+                                <a style="text-decoration:none;" href="/resetpw">Forgot Password?</a>
+                            </paper-item>
+                        </paper-listbox>
+                    </paper-menu-button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        class MySignin extends Polymer.Element {
+            static get is() { return 'my-signin'; }
+        }
+
+        window.customElements.define(MySignin.is, MySignin);
+    </script>
+</dom-module>

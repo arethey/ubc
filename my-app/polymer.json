@@ -2,12 +2,17 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/my-view1.html",
     "src/my-view2.html",
     "src/my-view3.html",
     "src/my-view404.html",
 
-    "src/my-dashboard.html"
+    "src/my-dashboard.html",
+    "src/my-accountlist.html",
+    "src/my-accountlist-new.html",
+    "src/my-about-us.html",
+    "src/my-signin.html",
+    "src/my-signup.html",
+    "src/my-resetpw.html"
   ],
   "sources": [
     "images/**/*",

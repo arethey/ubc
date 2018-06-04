@@ -9,32 +9,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 
 <dom-module id="my-dashboard">
   <template>
     <style include="shared-styles">
       :host {
+        --app-primary-color: #4285f4;
+        --app-secondary-color: black;
         display: block;
+      }
 
-        padding: 10px;
+      app-toolbar {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      canvas {
+        background-color: white;
+        margin: 0 auto;
+      }
+
+      .submit {
+        background-color: #4285f4;
+        color: white;
       }
     </style>
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>Dashboard</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per
-        in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    <app-header-layout has-scrolling-region>
+      <app-header fixed slot="header" condenses reveals effects="waterfall">
+        <app-toolbar class="maintitle">
+          <paper-icon-button icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
+          <div main-title>Dashboard</div>
+        </app-toolbar>
+        <div style="padding: 16px">
+          <canvas id="signature-pad"></canvas>
+          <br>
+          <paper-button raised on-tap="_clear">Clear</paper-button>
+          <paper-button raised class="submit" on-tap="_save">Save</paper-button>
+        </div>
+
+      </app-header>
+    </app-header-layout>
   </template>
 
   <script>
-    class MyDashboard extends Polymer.Element {
-      static get is() { return 'my-dashboard'; }
-    }
+    Polymer({
+      is: 'my-dashboard',
+      properties: {
+        narrow: {
+          type: Boolean,
+          notify: true
+        },
+      },
 
-    window.customElements.define(MyDashboard.is, MyDashboard);
+      ready() {
+        this.signaturePad = new SignaturePad(Polymer.dom(this.root).querySelector("#signature-pad"), {
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          penColor: 'rgb(0, 0, 0)'
+        });
+      },
+
+      toggleDrawer() {
+        this.dispatchEvent(new CustomEvent('toggleDrawer', {
+          bubbles: true, composed: true, detail: {
+            narrow: this.$.narrow
+          }
+        }));
+        this.$.narrow = !this.$.narrow;
+      },
+
+      _clear() {
+        this.signaturePad.clear();
+      },
+
+      _save() {
+        var dataURL = this.signaturePad.toDataURL();
+        this.download(dataURL, "signature.png");
+      },
+
+      download(dataURL, filename) {
+        var blob = this.dataURLToBlob(dataURL);
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement("a");
+        a.style = "display: none";
+        a.href = url;
+        a.download = filename;
+
+        document.body.appendChild(a);
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+
+      dataURLToBlob(dataURL) {
+        // Code taken from https://github.com/ebidel/filer.js
+        var parts = dataURL.split(';base64,');
+        var contentType = parts[0].split(":")[1];
+        var raw = window.atob(parts[1]);
+        var rawLength = raw.length;
+        var uInt8Array = new Uint8Array(rawLength);
+
+        for (var i = 0; i < rawLength; ++i) {
+          uInt8Array[i] = raw.charCodeAt(i);
+        }
+
+        return new Blob([uInt8Array], { type: contentType });
+      }
+    })
   </script>
 </dom-module>

@@ -1,0 +1,106 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-accountlist-new.html">
+
+<dom-module id="my-accountlist-new">
+    <template>
+        <style include="shared-styles">
+            :host {
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+                display: block;
+            }
+
+            app-toolbar {
+                color: #fff;
+                background-color: var(--app-primary-color);
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+            paper-fab.fab-menu {
+                position: fixed;
+                right: 32px;
+                bottom: 32px;
+            }
+
+            @media (min-width: 767px) {
+                .info {
+                    @apply --layout-horizontal;
+                }
+                .info paper-input {
+                    width: 50%;
+                }
+            }
+
+            .submit {
+                background-color: #4285f4;
+                color: white;
+            }
+        </style>
+
+        <app-header-layout has-scrolling-region>
+            <app-header fixed slot="header" condenses reveals effects="waterfall">
+                <app-toolbar class="maintitle">
+                    <a href="/accountlist">
+                        <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                    </a>
+                    <div main-title>New Account</div>
+                </app-toolbar>
+                <div class="card">
+                    <div class="info">
+                        <paper-input label="Firstname" style="margin-right: 10px;"></paper-input>
+                        <paper-input label="Lastname"></paper-input>
+                    </div>
+                    <paper-input label="Email"></paper-input>
+                    <paper-button raised class="submit">Save</paper-button>
+                </div>
+            </app-header>
+        </app-header-layout>
+
+    </template>
+
+    <script>
+        class MyAccountlistNew extends Polymer.Element {
+            static get is() { return 'my-accountlist-new'; }
+
+            static get properties() {
+                return {
+                    // route: Object,
+                }
+            }
+
+            toggleDrawer() {
+                this.dispatchEvent(new CustomEvent('toggleDrawer', {
+                    bubbles: true, composed: true, detail: {
+                        narrow: this.$.narrow
+                    }
+                }));
+                this.$.narrow = !this.$.narrow;
+            }
+        }
+
+        window.customElements.define(MyAccountlistNew.is, MyAccountlistNew);
+    </script>
+</dom-module>
