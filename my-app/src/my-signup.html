@@ -15,6 +15,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-stepper/paper-stepper.html">
+<link rel="import" href="../bower_components/paper-stepper/paper-step.html">
+<link rel="import" href="../bower_components/paper-stepper/paper-icon-stepper.html">
+<link rel="import" href="../bower_components/paper-stepper/paper-icon-step.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -43,32 +47,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <div class="card-signin">
-            <div class="card">
-                <center>
-                    <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
-                </center>
-                <h1>Create your UBC account</h1>
-                <span>to continue to Ultra Bio Corporation</span>
-                <paper-input label="Email">
-                    <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
-                </paper-input>
-                <paper-input label="Password" type="password">
-                    <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
-                </paper-input>
-                <div class="footer">
-                    <br>
-                    <paper-button raised class="action-btn">Create</paper-button>
-                    <a href="/signin">Sign in instead</a>
+            <paper-stepper selected="{{selectedSignupStep}}" id="stepper">
+                <paper-step></paper-step>
+                <paper-step></paper-step>
+                <paper-step></paper-step>
+            </paper-stepper>
+            <iron-pages selected="[[selectedSignupStep]]">
+                <div>
+                    <div class="card">
+                        <center>
+                            <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
+                        </center>
+                        <h1>Create your UBC account</h1>
+                        <span>to continue to Ultra Bio Corporation</span>
+                        <paper-input label="Email">
+                            <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
+                        </paper-input>
+                        <paper-input label="Password" type="password">
+                            <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
+                        </paper-input>
+                        <div class="footer">
+                            <br>
+                            <paper-button raised class="action-btn" on-tap="_nextStep">Create</paper-button>
+                            <a href="/signin">Sign in instead</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div>
+                    <div class="card">
+                        <center>
+                            <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
+                        </center>
+                        <h1>Email verification</h1>
+                        <p>Your email address needs to be verified.
+                            <a href="#">Send an email verification</a> again to ardiederrayal06@gmail.com
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <center>
+                            <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
+                        </center>
+                        <h1>Final step</h1>
+                        <span>to continue to Ultra Bio Corporation</span>
+                        <paper-input label="Account key">
+                            <iron-icon icon="my-icons:vpn-key" slot="prefix"></iron-icon>
+                        </paper-input>
+                        <div class="footer">
+                            <br>
+                            <paper-button raised class="action-btn" on-tap="_nextStep">Create</paper-button>
+                        </div>
+                    </div>
+                </div>
+            </iron-pages>
+
         </div>
     </template>
 
     <script>
-        class MySignup extends Polymer.Element {
-            static get is() { return 'my-signup'; }
-        }
+        Polymer({
+            is: 'my-signup',
+            properties: {
 
-        window.customElements.define(MySignup.is, MySignup);
+            },
+
+            _nextStep() {
+                var stepper = Polymer.dom(this.root).querySelector("#stepper");
+                stepper.next();
+                console.log(stepper);
+            }
+        })
     </script>
 </dom-module>

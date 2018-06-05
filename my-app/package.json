@@ -15,8 +15,11 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "mongodb": "^3.0.10",
+    "mongoose": "^5.1.4",
+    "prpl-server": "^1.2.0",
     "signature_pad": "^2.3.2",
     "web-animations-js": "^2.3.1"
   }
