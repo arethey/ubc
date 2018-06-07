@@ -16,6 +16,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shared-styles">
   <template>
     <style>
+      app-toolbar {
+        color: #fff;
+        background-color: #01579B;
+      }
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
       .card {
         margin: 24px;
         padding: 16px;
@@ -48,6 +57,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 12px;
         font-weight: 400;
         width: 80px;
+      }
+
+      .submit {
+        background-color: #01579B;
+        color: white;
       }
 
       @media (min-width: 767px) {

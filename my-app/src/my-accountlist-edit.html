@@ -32,15 +32,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: block;
             }
 
-            app-toolbar {
-                color: #fff;
-                background-color: var(--app-primary-color);
-            }
-
-            app-header paper-icon-button {
-                --paper-icon-button-ink-color: white;
-            }
-
             paper-fab.fab-menu {
                 position: fixed;
                 right: 32px;
@@ -60,11 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 .password {
                     @apply --layout-horizontal;
                 }
-            }
-
-            .submit {
-                background-color: #4285f4;
-                color: white;
             }
         </style>
         <iron-ajax auto id="ajax" url="{{url}}" method="[[method]]" handle-as="json" on-response="_accountlistData"></iron-ajax>
