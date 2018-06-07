@@ -16,9 +16,14 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.2.0",
     "mongodb": "^3.0.10",
     "mongoose": "^5.1.4",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "prpl-server": "^1.2.0",
     "signature_pad": "^2.3.2",
     "web-animations-js": "^2.3.1"

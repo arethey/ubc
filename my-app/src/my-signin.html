@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -39,21 +40,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <div class="card-signin">
+            <iron-ajax verbose id="ajax" method="POST" url="/accountlist/login"></iron-ajax>
             <div class="card">
                 <center>
                     <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
                 </center>
                 <h1>Sign in</h1>
                 <span>to continue to Ultra Bio Corporation</span>
-                <paper-input label="Email">
+                <paper-input label="Email" value="{{username}}">
                     <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
                 </paper-input>
-                <paper-input label="Password" type="password">
+                <paper-input label="Password" type="password" value="{{password}}">
                     <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
                 </paper-input>
                 <div class="footer">
                     <br>
-                    <paper-button raised class="action-btn">sign in</paper-button>
+                    <a href="/dashboard" style="text-decoration: none">
+                        <paper-button raised class="action-btn" on-tap="_signin">sign in</paper-button>
+                    </a>
                     <paper-menu-button>
                         <div slot="dropdown-trigger" style="color: royalblue;">More options</div>
                         <paper-listbox slot="dropdown-content">
@@ -71,10 +75,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
 
     <script>
-        class MySignin extends Polymer.Element {
-            static get is() { return 'my-signin'; }
-        }
+        Polymer({
+            is: 'my-signin',
+            properties: {
+                statusknown: Boolean
+            },
 
-        window.customElements.define(MySignin.is, MySignin);
+            _signin() {
+                this.$.ajax.contentType = "application/json";
+                this.$.ajax.body = {
+                    username: this.username,
+                    password: this.password,
+                };
+                this.$.ajax.generateRequest();
+                this.url = '';
+            },
+        })
     </script>
 </dom-module>

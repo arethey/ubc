@@ -18,9 +18,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-accountlist-new.html">
+<link rel="import" href="my-accountlist-edit.html">
 
 <dom-module id="my-accountlist">
     <template>
@@ -47,9 +49,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <app-route route="{{route}}" pattern="" active="{{accountlistActive}}"></app-route>
+        <app-route route="{{route}}" pattern="/edit/:_id" data="{{editData}}" tail="{{editRoute}}" active="{{editAccountlist}}"></app-route>
         <div hidden$="{{!accountlistActive}}">
             <iron-pages selected="[[route.path]]" attr-for-selected="name" fallback-selection="view404" role="main">
                 <div name="">
+                    <iron-ajax auto url="/accountlist/read" method="GET" params="{}" handle-as="json" on-response="_accountlistData"></iron-ajax>
                     <app-header-layout has-scrolling-region>
                         <app-header fixed slot="header" condenses reveals effects="waterfall">
                             <app-toolbar class="maintitle">
@@ -57,37 +61,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <div main-title>Accountlist</div>
                             </app-toolbar>
 
-                            <iron-list items="[[data]]" as="item" scroll-target="document">
-                                <!-- <template> -->
-                                <div>
-                                    <div class="item" tabindex$="[[tabIndex]]">
-                                        <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
-                                        <div class="pad">
-                                            <div class="primary">Ardie C. Derrayal</div>
-                                            <div class="secondary">ardiederrayal06@gmail.com</div>
-                                            <!-- <div class="secondary dim">Secondary dim</div> -->
+                            <iron-list items="[[accountlistData]]" as="item" scroll-target="document">
+                                <template>
+                                    <div>
+                                        <div class="item" tabindex$="[[tabIndex]]">
+                                            <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
+                                            <div class="pad">
+                                                <div class="primary">[[_fullname(item.firstname, item.middlename, item.lastname)]]</div>
+                                                <div class="secondary">[[item.email]]</div>
+                                                <!-- <div class="secondary dim">Secondary dim</div> -->
+                                            </div>
+                                            <a href="/accountlist/edit/{{item._id}}" style="text-decoration: none; color: #333" alt="{{item._id}}">
+                                                <paper-icon-button icon="my-icons:edit" title="Edit Account" on-tap="_editAccountlist" alt="{{item._id}}"></paper-icon-button>
+                                            </a>
                                         </div>
-                                        <a href="/accountlist/edit" style="text-decoration: none; color: #333">
-                                            <paper-icon-button icon="my-icons:edit" title="Edit Account"></paper-icon-button>
-                                        </a>
                                     </div>
-                                    <div class="item" tabindex$="[[tabIndex]]">
-                                        <iron-image class="avatar" sizing="contain" src="../images/user.png"></iron-image>
-                                        <div class="pad">
-                                            <div class="primary">Peter Villaceran</div>
-                                            <div class="secondary">pvillac95@gmail.com</div>
-                                            <!-- <div class="secondary dim">Secondary dim</div> -->
-                                        </div>
-                                        <a href="/accountlist/edit" style="text-decoration: none; color: #333">
-                                            <paper-icon-button icon="my-icons:edit" title="Edit Account"></paper-icon-button>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- </template> -->
+                                </template>
                             </iron-list>
 
                         </app-header>
                     </app-header-layout>
+
                     <a href="/accountlist/new" style="text-decoration: none;">
                         <paper-fab noink class="fab-menu" icon="my-icons:person-add" on-tap="_accountlistnew"></paper-fab>
                     </a>
@@ -97,12 +91,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div id="accountlistnew"></div>
                     <my-accountlist-new id="d23" prev-route="{{route.prefix}}"></my-accountlist-new>
                 </div>
-                <div name="view404" style="text-align: center; margin-top: 26px">
+                <!-- <div name="view404">Not found.</div> -->
+                <div name="/view404" style="text-align: center; margin-top: 26px">
                     <iron-image src="../images/404.png"></iron-image>
                     <h1>Whoops! Page not found.</h1>
                 </div>
-
             </iron-pages>
+        </div>
+        <div hidden$="{{!editAccountlist}}">
+            <div id="accountlistedit"></div>
+            <my-accountlist-edit id="d25" transaction-key='{{editData._id}}' prev-route="{{route.prefix}}"></my-accountlist-edit>
         </div>
     </template>
 
@@ -125,6 +123,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.narrow = !this.$.narrow;
             }
 
+            _accountlistData(data) {
+                this.accountlistData = data.detail.response.data;
+            }
+
             _accountlistnew() {
                 var node = Polymer.dom(this.root).querySelector("#accountlistnew");
                 if (node) {
@@ -138,6 +140,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var currentDiv = document.getElementById("accountlistnew");
                     Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
                 }
+            }
+
+            _editAccountlist(e) {
+                var data_args = Polymer.dom(e).rootTarget.getAttribute("alt");
+                var node = Polymer.dom(this.root).querySelector("#accountlistedit");
+                if (node) {
+                    var oldDiv = Polymer.dom(node.parentNode).querySelector("#d25");
+                    if (oldDiv) {
+                        Polymer.dom(node.parentNode).removeChild(oldDiv);
+                    }
+                    var newDiv = document.createElement("my-accountlist-edit");
+                    newDiv.setAttribute("id", "d25")
+                    newDiv.setAttribute("transaction-key", data_args)
+                    newDiv.setAttribute("prev-route", this.route.prefix);
+                    var currentDiv = document.getElementById("accountlistedit");
+                    Polymer.dom(node.parentNode).insertBefore(newDiv, currentDiv);
+                }
+            }
+
+            _fullname(e, f, g) {
+                return e + ' ' + f + ' ' + g;
             }
         }
 

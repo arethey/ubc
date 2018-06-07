@@ -135,7 +135,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         cursor: pointer;
       }
     </style>
-
     <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
     </app-location>
 
@@ -169,12 +168,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <a>
                 <iron-icon icon="my-icons:power-settings-new"></iron-icon>Sign out</a>
             </paper-item>
-
-            <footer>
+            <paper-item>
               <a name="about-us" href="[[rootPath]]about-us">
-                &copy; Ultra Bio Corporation v0.0.1
+                V0.0.1
               </a>
-            </footer>
+            </paper-item>
+          </paper-listbox>
 
         </app-header-layout>
       </app-drawer>
@@ -183,11 +182,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <my-dashboard name="dashboard"></my-dashboard>
         <my-accountlist name="accountlist" route="[[subroute]]"></my-accountlist>
+        <my-about-us name="about-us"></my-about-us>
+        <my-view404 name="view404"></my-view404>
+
         <my-signin name="signin"></my-signin>
         <my-signup name="signup"></my-signup>
         <my-resetpw name="resetpw"></my-resetpw>
-        <my-about-us name="about-us"></my-about-us>
-        <my-view404 name="view404"></my-view404>
       </iron-pages>
 
     </app-drawer-layout>
@@ -213,12 +213,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+          statusknown: {
+            type: Boolean,
+            value: true,
+            // notify: true
+          }
         };
       }
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page, statusknown)',
         ];
       }
 
@@ -226,7 +231,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.ready();
         this.addEventListener('toggleDrawer', (e) => this._onChangeSection(e));
         this.addEventListener('toggleDrawer2', (e) => this._onChangeSection2(e));
-
         // listen for online/offline
         // Polymer.RenderStatus.afterNextRender(this, () => {
         //   window.addEventListener('online', (e) => this._notifyNetworkStatus(e));
@@ -249,14 +253,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         drawerlayout.forceNarrow = e.detail.narrow;
       }
 
-      _routePageChanged(page) {
+      _routePageChanged(page, statusknown) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'dashboard';
-
         // Close a non-persistent drawer when the page & route are changed.
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
+        if (statusknown) {
+          this.page = page || 'dashboard';
+          var drawer = Polymer.dom(this.root).querySelector("#drawer");
+          if (drawer) {
+            if (!drawer.persistent) {
+              drawer.close();
+            }
+          }
+        } else {
+          this.page = page || 'signin';
         }
       }
 

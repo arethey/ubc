@@ -53,8 +53,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button icon="my-icons:menu" drawer-toggle on-tap="toggleDrawer"></paper-icon-button>
           <div main-title>Dashboard</div>
         </app-toolbar>
+
         <div style="padding: 16px">
           <canvas id="signature-pad" width="300" height="300"></canvas>
+          <img src="{{svgImg}}"></img>
           <br>
           <paper-button raised on-tap="_clear">Clear</paper-button>
           <paper-button raised class="submit" on-tap="_save">Save</paper-button>
@@ -95,8 +97,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _save() {
-        var dataURL = this.signaturePad.toDataURL();
-        this.download(dataURL, "signature.png");
+        if (this.signaturePad.isEmpty()) {
+          alert("Please provide a signature first.");
+        } else {
+          var dataURL = this.signaturePad.toDataURL("image/svg+xml");
+          this.svgImg = dataURL;
+          // this.download(dataURL, "signature.svg");
+        }
       },
 
       download(dataURL, filename) {

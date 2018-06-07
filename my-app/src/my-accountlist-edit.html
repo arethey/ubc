@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="short-unique-id.html">
 
-<dom-module id="my-accountlist-new">
+<dom-module id="my-accountlist-edit">
     <template>
         <style include="shared-styles">
             :host {
@@ -67,22 +67,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: white;
             }
         </style>
-        <iron-ajax verbose id="ajax" method="POST" url="/accountlist/add"></iron-ajax>
+        <iron-ajax auto id="ajax" url="{{url}}" method="[[method]]" handle-as="json" on-response="_accountlistData"></iron-ajax>
         <app-header-layout has-scrolling-region>
             <app-header fixed slot="header" condenses reveals effects="waterfall">
                 <app-toolbar class="maintitle">
                     <a href="/accountlist">
-                        <paper-icon-button noink class="menu" style="color: white;" icon="my-icons:arrow-back"></paper-icon-button>
+                        <paper-icon-button class="menu" icon="my-icons:arrow-back" style="color: white"></paper-icon-button>
                     </a>
-                    <div main-title>New Account</div>
+                    <div main-title>Edit Account {{accountkey}}</div>
+                    <paper-icon-button icon="my-icons:delete-forever" on-tap="_openDelete"></paper-icon-button>
                 </app-toolbar>
-                <paper-dialog id="actions">
+                <paper-dialog id="actionsUpdate">
                     <p>
-                        <h1>Save this new account?</h1>
+                        <h1>Update account?</h1>
                     </p>
                     <div class="buttons">
                         <paper-button dialog-dismiss>Cancel</paper-button>
-                        <paper-button dialog-confirm autofocus on-tap="_ok">Ok</paper-button>
+                        <paper-button dialog-confirm autofocus on-tap="_update">Ok</paper-button>
+                    </div>
+                </paper-dialog>
+                <paper-dialog id="actionsDelete">
+                    <p>
+                        <h1>Delete account?</h1>
+                    </p>
+                    <div class="buttons">
+                        <paper-button dialog-dismiss>Cancel</paper-button>
+                        <paper-button dialog-confirm autofocus on-tap="_delete">Ok</paper-button>
                     </div>
                 </paper-dialog>
                 <div class="alert failed" id="alert">
@@ -101,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div slot="prefix">+63</div>
                     </paper-input>
                     <paper-input label="Email" value="{{email}}"></paper-input>
-                    <paper-button raised class="submit" on-tap="_save">Save</paper-button>
+                    <paper-button raised class="submit" on-tap="_openUpdate">Update</paper-button>
                 </div>
             </app-header>
         </app-header-layout>
@@ -110,14 +120,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
         Polymer({
-            is: 'my-accountlist-new',
+            is: 'my-accountlist-edit',
             properties: {
-
+                transactionKey: String
             },
 
             ready() {
-                this.accountkey = this.guid();
-                this.isEmailVerified = false;
+                // this.accountkey = this.guid();
+                this.url = '/accountlist/edit/' + this.transactionKey;
+            },
+
+            _accountlistData(data) {
+                if (this.transactionKey) {
+                    if (this.url === '/accountlist/edit/' + this.transactionKey) {
+                        this.accountkey = data.detail.response.data.accountkey;
+                        this.firstname = data.detail.response.data.firstname;
+                        this.middlename = data.detail.response.data.middlename;
+                        this.lastname = data.detail.response.data.lastname;
+                        this.cellphone = data.detail.response.data.cellphone;
+                        this.email = data.detail.response.data.email;
+                        this.isEmailVerified = data.detail.response.data.isEmailVerified;
+                    }
+                }
             },
 
             guid() {
@@ -134,19 +158,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.narrow = !this.$.narrow;
             },
 
-            _save() {
+            _openUpdate() {
                 if (!this.firstname || !this.middlename || !this.lastname || !this.email || !this.cellphone) {
                     this.errMsg = 'Please fill up all required fields..';
                     this.$.alert.style.display = 'block';
                 } else if (this.cellphone.length < 10) {
                     this.errMsg = 'Invalid cellphone number';
                     this.$.alert.style.display = 'block';
+
                 } else {
-                    Polymer.dom(this.root).querySelector("#actions").open();
+                    Polymer.dom(this.root).querySelector("#actionsUpdate").open();
                 }
             },
 
-            _ok() {
+            _update() {
+                this.method = 'PUT';
+                this.$.ajax.url = '/accountlist/update/' + this.transactionKey;
                 this.$.ajax.contentType = "application/json";
                 this.$.ajax.body = {
                     accountkey: this.accountkey,
@@ -159,6 +186,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 };
                 this.$.ajax.generateRequest();
                 this.url = '';
+                window.location = "/accountlist";
+            },
+
+            _openDelete() {
+                Polymer.dom(this.root).querySelector("#actionsDelete").open();
+            },
+
+            _delete() {
+                this.method = 'DELETE';
+                this.$.ajax.url = '/accountlist/delete/' + this.transactionKey;
+                this.$.ajax.generateRequest();
                 window.location = "/accountlist";
             },
 
