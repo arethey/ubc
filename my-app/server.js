@@ -13,7 +13,9 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://ubc:ultrabiocorporation123@ds247430.mlab.com:47430/ubc');
 var db = mongoose.connection;
 
+// var routes = require('./routes/index');
 var accountlist = require('./routes/accountlist');
+var user = require('./routes/user');
 
 // Init App
 var app = express();
@@ -63,8 +65,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-
+// app.use('/', routes);
 app.use('/accountlist', accountlist);
+app.use('/user', user);
 
 // Set Port
 app.set('port', (process.env.PORT || 3000));
@@ -78,4 +81,13 @@ app.get('*', prpl.makeHandler('.', {
     { name: '/', browserCapabilities: ['es2015', 'push'] },
     { name: 'fallback' }
   ]
-}))
+}));
+
+// function ensureAuthenticated(req, res, next){
+// 	if(req.isAuthenticated()){
+// 		return next();
+// 	} else {
+// 		//req.flash('error_msg','You are not logged in');
+// 		res.redirect('/signin');
+// 	}
+// }

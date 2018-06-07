@@ -85,22 +85,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-button dialog-confirm autofocus on-tap="_ok">Ok</paper-button>
                     </div>
                 </paper-dialog>
-                <div class="alert failed" id="alert">
-                    <span class="closebtn" on-tap="_closeAlert">&times;</span>
-                    {{errMsg}}
-                </div>
                 <div class="card">
+                    <div class="alert failed" id="alert">
+                        <span class="closebtn" on-tap="_closeAlert">&times;</span>
+                        {{errMsg}}
+                    </div>
                     <paper-input label="Account key" value="{{accountkey}}" readonly></paper-input>
                     <div class="info">
-                        <paper-input label="Firstname" style="margin-right: 10px;" value="{{firstname}}"></paper-input>
-                        <paper-input label="Middlename" style="margin-right: 10px;" value="{{middlename}}"></paper-input>
-                        <paper-input label="Lastname" value="{{lastname}}"></paper-input>
+                        <paper-input always-float-label label="Firstname*" style="margin-right: 10px;" value="{{firstname}}"></paper-input>
+                        <paper-input always-float-label label="Middlename*" style="margin-right: 10px;" value="{{middlename}}"></paper-input>
+                        <paper-input always-float-label label="Lastname*" value="{{lastname}}"></paper-input>
                     </div>
-                    <paper-input label="Phone No." allowed-pattern="[\d]" prevent-invalid-input always-float-label char-counter maxlength="10"
+                    <paper-input label="Phone No.*" allowed-pattern="[\d]" prevent-invalid-input always-float-label char-counter maxlength="10"
                         value="{{cellphone}}">
                         <div slot="prefix">+63</div>
                     </paper-input>
-                    <paper-input label="Email" value="{{email}}"></paper-input>
+                    <paper-input always-float-label label="Email*" value="{{email}}"></paper-input>
                     <paper-button raised class="submit" on-tap="_save">Save</paper-button>
                 </div>
             </app-header>

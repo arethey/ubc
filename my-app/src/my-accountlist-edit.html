@@ -95,11 +95,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-button dialog-confirm autofocus on-tap="_delete">Ok</paper-button>
                     </div>
                 </paper-dialog>
-                <div class="alert failed" id="alert">
-                    <span class="closebtn" on-tap="_closeAlert">&times;</span>
-                    {{errMsg}}
-                </div>
+
                 <div class="card">
+                    <div class="alert failed" id="alert">
+                        <span class="closebtn" on-tap="_closeAlert">&times;</span>
+                        {{errMsg}}
+                    </div>
                     <paper-input label="Account key" value="{{accountkey}}" readonly></paper-input>
                     <div class="info">
                         <paper-input label="Firstname" style="margin-right: 10px;" value="{{firstname}}"></paper-input>

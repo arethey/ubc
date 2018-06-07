@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-stepper/paper-step.html">
 <link rel="import" href="../bower_components/paper-stepper/paper-icon-stepper.html">
 <link rel="import" href="../bower_components/paper-stepper/paper-icon-step.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -47,28 +48,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <div class="card-signin">
-            <paper-stepper selected="{{selectedSignupStep}}" id="stepper">
+            <paper-stepper selected="{{selectedSignupStep}}" id="stepper" no-buttons=="true">
                 <paper-step></paper-step>
                 <paper-step></paper-step>
                 <paper-step></paper-step>
             </paper-stepper>
             <iron-pages selected="[[selectedSignupStep]]">
                 <div>
+                    <iron-ajax verbose id="ajax" method="POST" url="/user/add"></iron-ajax>
                     <div class="card">
                         <center>
                             <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
                         </center>
+                        <div class="alert failed" id="alert">
+                            <span class="closebtn" on-tap="_closeAlert">&times;</span>
+                            {{errMsg}}
+                        </div>
                         <h1>Create your UBC account</h1>
                         <span>to continue to Ultra Bio Corporation</span>
-                        <paper-input label="Email" name="email">
+                        <paper-input label="Email" value="{{email}}">
                             <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
                         </paper-input>
-                        <paper-input label="Password" type="password" name="password">
+                        <paper-input label="Password" type="password" value="{{password}}">
                             <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
                         </paper-input>
                         <div class="footer">
                             <br>
-                            <paper-button raised class="action-btn" type="submit">Create</paper-button>
+                            <paper-button raised class="action-btn" type="submit" on-tap="_signup">Create</paper-button>
                             <a href="/signin">Sign in instead</a>
                         </div>
                     </div>
@@ -112,10 +118,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
 
-            _nextStep() {
-                var stepper = Polymer.dom(this.root).querySelector("#stepper");
-                stepper.next();
-                console.log(stepper);
+            ready() {
+                this.timestamp = Number(new Date());
+            },
+
+            _signup() {
+                if (!this.email || !this.password) {
+                    this.errMsg = 'Please fill up all required fields..';
+                    this.$.alert.style.display = 'block';
+                } else {
+                    this.$.ajax.contentType = "application/json";
+                    this.$.ajax.body = {
+                        email: this.email,
+                        password: this.password,
+                        timestamp: this.timestamp
+                    };
+                    this.$.ajax.generateRequest();
+                    this.url = '';
+                    this.selectedSignupStep = 1;
+                }
+            },
+
+            _closeAlert() {
+                this.$.alert.style.display = 'none';
             }
         })
     </script>

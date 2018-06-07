@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="shared-styles.html">
 
 <link rel="lazy-import" href="my-dashboard.html">
 <link rel="lazy-import" href="my-accountlist.html">
@@ -141,56 +142,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
-      <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-        <app-header-layout has-scrolling-region>
-          <app-header fixed slot="header">
-            <div class="avatar-container">
-              <div class="image"></div>
-            </div>
-            <div class="contact-info">
-              <div class="name">Ardie C. Derrayal</div>
-              <div class="email">ardiederrayal06@gmail.com</div>
-            </div>
-          </app-header>
+    <template is="dom-if" if="{{statusknown}}">
+      <app-drawer-layout fullbleed narrow="{{narrow}}" id="drawerLayout">
+        <!-- Drawer content -->
+        <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+          <app-header-layout has-scrolling-region>
+            <app-header fixed slot="header">
+              <div class="avatar-container">
+                <div class="image"></div>
+              </div>
+              <div class="contact-info">
+                <div class="name">Ardie C. Derrayal</div>
+                <div class="email">ardiederrayal06@gmail.com</div>
+              </div>
+            </app-header>
 
-          <paper-listbox selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <paper-item name="dashboard">
-              <a name="dashboard" href="[[rootPath]]dashboard">
-                <iron-icon icon="my-icons:dashboard"></iron-icon>Dashboard</a>
-            </paper-item>
-            <paper-item name="accountlist">
-              <a name="accountlist" href="[[rootPath]]accountlist">
-                <iron-icon icon="my-icons:group"></iron-icon>Accountlist</a>
-            </paper-item>
-            <paper-item>
-              <a>
-                <iron-icon icon="my-icons:power-settings-new"></iron-icon>Sign out</a>
-            </paper-item>
-            <paper-item>
-              <a name="about-us" href="[[rootPath]]about-us">
-                V0.0.1
-              </a>
-            </paper-item>
-          </paper-listbox>
+            <paper-listbox selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+              <paper-item name="dashboard">
+                <a name="dashboard" href="[[rootPath]]dashboard">
+                  <iron-icon icon="my-icons:dashboard"></iron-icon>Dashboard</a>
+              </paper-item>
+              <paper-item name="accountlist">
+                <a name="accountlist" href="[[rootPath]]accountlist">
+                  <iron-icon icon="my-icons:group"></iron-icon>Accounts</a>
+              </paper-item>
+              <paper-item on-tap="_signOut">
+                <a>
+                  <iron-icon icon="my-icons:power-settings-new"></iron-icon>Sign out</a>
+              </paper-item>
+              <paper-item>
+                <a name="about-us" href="[[rootPath]]about-us">
+                  V0.0.1
+                </a>
+              </paper-item>
+            </paper-listbox>
 
-        </app-header-layout>
-      </app-drawer>
+          </app-header-layout>
+        </app-drawer>
 
-      <!-- main content -->
+        <!-- main content -->
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+          <my-dashboard name="dashboard"></my-dashboard>
+          <my-accountlist name="accountlist" route="[[subroute]]"></my-accountlist>
+          <my-about-us name="about-us"></my-about-us>
+          <my-view404 name="view404"></my-view404>
+
+          <!-- <my-signin name="signin"></my-signin>
+          <my-signup name="signup"></my-signup>
+          <my-resetpw name="resetpw"></my-resetpw> -->
+        </iron-pages>
+
+      </app-drawer-layout>
+    </template>
+    <template is="dom-if" if="{{!statusknown}}">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-        <my-dashboard name="dashboard"></my-dashboard>
-        <my-accountlist name="accountlist" route="[[subroute]]"></my-accountlist>
-        <my-about-us name="about-us"></my-about-us>
-        <my-view404 name="view404"></my-view404>
-
-        <my-signin name="signin"></my-signin>
+        <my-signin name="signin" status-known="{{statusknown}}"></my-signin>
         <my-signup name="signup"></my-signup>
         <my-resetpw name="resetpw"></my-resetpw>
+        <my-view404 name="view404"></my-view404>
       </iron-pages>
+    </template>
 
-    </app-drawer-layout>
   </template>
 
   <script>
@@ -215,8 +227,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           rootPath: String,
           statusknown: {
             type: Boolean,
-            value: true,
-            // notify: true
+            value: false
           }
         };
       }
@@ -282,6 +293,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404';
+      }
+
+      _signOut() {
+        this.statusknown = false;
+        window.location = '/';
       }
     }
 

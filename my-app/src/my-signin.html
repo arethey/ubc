@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -40,14 +41,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <div class="card-signin">
-            <iron-ajax verbose id="ajax" method="POST" url="/accountlist/login"></iron-ajax>
             <div class="card">
+                <app-localstorage-document key="search" data="{{statusKnown}}"></app-localstorage-document>
+                <!-- <iron-ajax verbose id="ajax" method="POST" url="/user/login"></iron-ajax> -->
                 <center>
                     <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
                 </center>
                 <h1>Sign in</h1>
                 <span>to continue to Ultra Bio Corporation</span>
-                <paper-input label="Email" value="{{username}}">
+                <div style="color: red; font-size: 14px;">
+                    <span style="float: right">{{errorMSG}}</span>
+                </div>
+                <paper-input label="Email" value="{{email}}">
                     <iron-icon icon="my-icons:email" slot="prefix"></iron-icon>
                 </paper-input>
                 <paper-input label="Password" type="password" value="{{password}}">
@@ -55,9 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-input>
                 <div class="footer">
                     <br>
-                    <a href="/dashboard" style="text-decoration: none">
-                        <paper-button raised class="action-btn" on-tap="_signin">sign in</paper-button>
-                    </a>
+                    <paper-button raised class="action-btn" on-tap="_submit">sign in</paper-button>
                     <paper-menu-button>
                         <div slot="dropdown-trigger" style="color: royalblue;">More options</div>
                         <paper-listbox slot="dropdown-content">
@@ -78,17 +81,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'my-signin',
             properties: {
-                statusknown: Boolean
+                statusKnown: {
+                    type: Boolean,
+                    notify: true
+                }
             },
 
-            _signin() {
-                this.$.ajax.contentType = "application/json";
-                this.$.ajax.body = {
-                    username: this.username,
-                    password: this.password,
-                };
-                this.$.ajax.generateRequest();
-                this.url = '';
+            _submit() {
+                // this.$.ajax.contentType = "application/json";
+                // this.$.ajax.body = {
+                //     email: this.email,
+                //     password: this.password
+                // };
+                // this.$.ajax.generateRequest();
+                // this.url = '';
+
+                // email: hbs.auss@gmail.com
+                // pw: 123456
+                if (this.email == 'hbs.auss@gmail.com' && this.password == '123456') {
+                    this.statusKnown = true;
+                } else {
+                    this.errorMSG = 'Invalid email / password!';
+                }
             },
         })
     </script>
