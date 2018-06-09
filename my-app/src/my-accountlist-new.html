@@ -32,24 +32,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: block;
             }
 
-            paper-fab.fab-menu {
-                position: fixed;
-                right: 32px;
-                bottom: 32px;
-            }
-
             @media (min-width: 767px) {
                 .info {
                     @apply --layout-horizontal;
                 }
                 .info paper-input {
                     width: 33%;
-                }
-                .password paper-input {
-                    width: 50%;
-                }
-                .password {
-                    @apply --layout-horizontal;
                 }
             }
         </style>
@@ -71,23 +59,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-button dialog-confirm autofocus on-tap="_ok">Ok</paper-button>
                     </div>
                 </paper-dialog>
-                <div class="card">
-                    <div class="alert failed" id="alert">
-                        <span class="closebtn" on-tap="_closeAlert">&times;</span>
-                        {{errMsg}}
+                <div class="container-card">
+                    <div class="card">
+                        <div class="alert failed" id="alert">
+                            <span class="closebtn" on-tap="_closeAlert">&times;</span>
+                            {{errMsg}}
+                        </div>
+                        <paper-input label="Account key" value="{{accountkey}}" readonly></paper-input>
+                        <div class="info">
+                            <paper-input always-float-label label="Firstname*" style="margin-right: 10px;" value="{{firstname}}"></paper-input>
+                            <paper-input always-float-label label="Middlename*" style="margin-right: 10px;" value="{{middlename}}"></paper-input>
+                            <paper-input always-float-label label="Lastname*" value="{{lastname}}"></paper-input>
+                        </div>
+                        <paper-input label="Phone No.*" allowed-pattern="[\d]" prevent-invalid-input always-float-label char-counter maxlength="10"
+                            value="{{cellphone}}">
+                            <div slot="prefix">+63</div>
+                        </paper-input>
+                        <paper-input always-float-label label="Email*" value="{{email}}"></paper-input>
+                        <paper-button raised class="submit" on-tap="_save">Save</paper-button>
                     </div>
-                    <paper-input label="Account key" value="{{accountkey}}" readonly></paper-input>
-                    <div class="info">
-                        <paper-input always-float-label label="Firstname*" style="margin-right: 10px;" value="{{firstname}}"></paper-input>
-                        <paper-input always-float-label label="Middlename*" style="margin-right: 10px;" value="{{middlename}}"></paper-input>
-                        <paper-input always-float-label label="Lastname*" value="{{lastname}}"></paper-input>
-                    </div>
-                    <paper-input label="Phone No.*" allowed-pattern="[\d]" prevent-invalid-input always-float-label char-counter maxlength="10"
-                        value="{{cellphone}}">
-                        <div slot="prefix">+63</div>
-                    </paper-input>
-                    <paper-input always-float-label label="Email*" value="{{email}}"></paper-input>
-                    <paper-button raised class="submit" on-tap="_save">Save</paper-button>
                 </div>
             </app-header>
         </app-header-layout>

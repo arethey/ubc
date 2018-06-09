@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -58,21 +59,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .drawer-list {
-        margin: 0 20px;
+        margin: 12px;
       }
 
       .drawer-list a {
+        line-height: 60px;
         display: block;
-        padding: 0 16px;
         text-decoration: none;
         color: var(--app-secondary-color);
-        line-height: 40px;
-        cursor: pointer;
-        /* text-align: center; */
       }
 
-      .drawer-list a.iron-selected {
-        color: black;
+      .drawer-list a:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .iron-selected .menuSelected {
+        color: var(--app-primary-color);
         font-weight: bold;
       }
 
@@ -110,19 +112,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-secondary-color);
       }
 
-      paper-item {
-        height: 54px;
-      }
-
-      paper-item>a {
-        width: 100%;
-        height: 100%;
-        line-height: 54px;
-        /* text-align: center; */
-        text-decoration: none;
-        color: black;
-      }
-
       iron-icon {
         margin-right: 16px;
       }
@@ -157,25 +146,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             </app-header>
 
-            <paper-listbox selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-              <paper-item name="dashboard">
-                <a name="dashboard" href="[[rootPath]]dashboard">
-                  <iron-icon icon="my-icons:dashboard"></iron-icon>Dashboard</a>
-              </paper-item>
-              <paper-item name="accountlist">
-                <a name="accountlist" href="[[rootPath]]accountlist">
-                  <iron-icon icon="my-icons:group"></iron-icon>Accounts</a>
-              </paper-item>
-              <paper-item on-tap="_signOut">
-                <a>
-                  <iron-icon icon="my-icons:power-settings-new"></iron-icon>Sign out</a>
-              </paper-item>
-              <paper-item>
-                <a name="about-us" href="[[rootPath]]about-us" style="font-size: 14px; text-align: center">
-                  V0.0.1
-                </a>
-              </paper-item>
-            </paper-listbox>
+            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+              <a name="dashboard" href="[[rootPath]]dashboard">
+                <paper-icon-item toggles="true" class="menuSelected">
+                  <iron-icon icon="my-icons:dashboard"></iron-icon>
+                  <span>Dashboard</span>
+                </paper-icon-item>
+              </a>
+              <a name="accountlist" href="[[rootPath]]accountlist">
+                <paper-icon-item toggles="true" class="menuSelected">
+                  <iron-icon icon="my-icons:group"></iron-icon>
+                  <span>Accounts</span>
+                </paper-icon-item>
+              </a>
+              <a>
+                <paper-icon-item toggles="true" class="menuSelected" on-tap="_signOut">
+                  <iron-icon icon="my-icons:power-settings-new"></iron-icon>
+                  <span>Sign out</span>
+                </paper-icon-item>
+              </a>
+              <a name="about-us" href="[[rootPath]]about-us">
+                <paper-icon-item toggles="true" class="menuSelected">
+                  <!-- <iron-icon icon="my-icons:power-settings-new"></iron-icon> -->
+                  <span>V0.0.1</span>
+                </paper-icon-item>
+              </a>
+            </iron-selector>
 
           </app-header-layout>
         </app-drawer>
@@ -268,7 +264,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         // Close a non-persistent drawer when the page & route are changed.
-        if (statusknown) {
+        console.log(statusknown);
+        if (statusknown == true) {
           this.page = page || 'dashboard';
           var drawer = Polymer.dom(this.root).querySelector("#drawer");
           if (drawer) {

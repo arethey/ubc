@@ -19,19 +19,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-signin">
     <template>
         <style include="shared-styles">
-            :host {
-                display: block;
-
-                padding: 10px;
-            }
-
-            .footer {
-                height: 68px;
+            @media (min-width: 767px) {
+                :host {
+                    display: block;
+                    padding: 10px;
+                }
             }
 
             .action-btn {
@@ -40,11 +38,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card-signin">
             <div class="card">
-                <app-localstorage-document key="search" data="{{statusKnown}}"></app-localstorage-document>
                 <!-- <iron-ajax verbose id="ajax" method="POST" url="/user/login"></iron-ajax> -->
-                <center>
-                    <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
-                </center>
+                <app-localstorage-document key="statusKnownKey" data="{{statusKnown}}"></app-localstorage-document>
+
+                <iron-image alt="The Polymer logo." src="../images/ubc_logo128.png"></iron-image>
                 <h1>Sign in</h1>
                 <span>to continue to Ultra Bio Corporation</span>
                 <div style="color: red; font-size: 14px;">
@@ -56,8 +53,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input label="Password" type="password" value="{{password}}">
                     <iron-icon icon="my-icons:lock" slot="prefix"></iron-icon>
                 </paper-input>
+                <br>
                 <div class="footer">
-                    <br>
                     <paper-button raised class="action-btn submit" on-tap="_submit">sign in</paper-button>
                     <paper-menu-button>
                         <div slot="dropdown-trigger" style="color: royalblue;">More options</div>
